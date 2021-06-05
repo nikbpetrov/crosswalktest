@@ -4,7 +4,7 @@ from io import BytesIO
 
 from docx import Document
 
-import helper_funcs
+from . import helper_funcs
 
 def get_diagnostics_obj(source_shape, source_shape_id, target_shape, target_shape_id, intersect_unedited, intersect, tolerance_percent, tolerance_units, tolerance_values_sim_prop):
 	units = helper_funcs.get_projection_units(source_shape, target_shape)

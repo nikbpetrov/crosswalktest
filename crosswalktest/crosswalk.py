@@ -4,8 +4,8 @@ from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
-import helper_funcs
-import diagnostics
+from . import helper_funcs
+from . import diagnostics
 
 def crosswalk(source_filepath, source_shape_id, target_filepath, target_shape_id, 
 				tolerance_percent = 10, tolerance_units = None, 
