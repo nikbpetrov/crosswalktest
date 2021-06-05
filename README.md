@@ -27,14 +27,17 @@ or
 				export = False, export_filename = None)`
 
 -- **Input**: *explanation coming soon*
+
 -- **Output**: 2 return values -> `intersect` (i.e. the intersection between the two files) and `diagnostics_obj` (an object containing diagnostics of the intersection)
 
 `ct.print_diagnostics(diagnostics_obj)`
 
 -- **Input**: the `diagnostics_obj` returned by the `crosswalk` function
+
 -- **Ouput**: Readable diagnostics into your console
 
 `ct.save_diagnostics_to_word(diagnostics_obj, output_type, filename = None)`
 
 -- **Input**: the `diagnostics_obj` returned by the `crosswalk` function, `output_type` (either 'table' or 'text'), `filename` of the to-be-saved document
+
 -- **Output**: word file with diagnostics information (in either table or text format as specified in the `output_type` argument)
