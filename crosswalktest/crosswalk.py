@@ -56,6 +56,7 @@ def crosswalk(source_filepath, source_shape_id, target_filepath, target_shape_id
 		if not(filename.endswith('.csv')):
 			filename = filename+'.csv'
 
-		intersect.to_csv(filename, index=False)
+		# dropping geometry to save space and time
+		intersect.drop('geometry', axis='columns', inplace=False).to_csv(filename, index=False)
 
 	return intersect, diagnostics_obj
