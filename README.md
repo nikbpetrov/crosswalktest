@@ -16,13 +16,13 @@ or
 
 or
 
-`import crosswalktest as ct`
+`import crosswalktest as cw`
 
-[examples given with the latter, if the former is chosen, skip the 'ct.' prefix on the functions]
+[examples given with the latter, if the former is chosen, skip the 'cw.' prefix on the functions]
 
 # Use
 
-`ct.crosswalk(source_filepath, source_shape_id, target_filepath, target_shape_id, 
+`cw.crosswalk(source_filepath, source_shape_id, target_filepath, target_shape_id, 
 				tolerance_percent = 10, tolerance_units = None, 
 				export = False, export_filename = None)`
 
@@ -30,13 +30,13 @@ or
 
 -- **Output**: 2 return values -> `intersect` (i.e. the intersection between the two files) and `diagnostics_obj` (an object containing diagnostics of the intersection)
 
-`ct.print_diagnostics(diagnostics_obj)`
+`cw.print_diagnostics(diagnostics_obj)`
 
 -- **Input**: the `diagnostics_obj` returned by the `crosswalk` function
 
 -- **Ouput**: Readable diagnostics into your console
 
-`ct.save_diagnostics_to_word(diagnostics_obj, output_type, filename = None)`
+`cw.save_diagnostics_to_word(diagnostics_obj, output_type, filename = None)`
 
 -- **Input**: the `diagnostics_obj` returned by the `crosswalk` function, `output_type` (either 'table' or 'text'), `filename` of the to-be-saved document
 
