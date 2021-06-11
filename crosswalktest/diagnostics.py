@@ -272,6 +272,7 @@ def save_diagnostics_to_word(diagnostics_obj, output_type, filename = None):
 		doc.add_picture(diagnostics_obj_text['intersect_shape']['plot'])
 
 	elif output_type == 'table':
+		helper_funcs.change_orinetation(doc)
 		doc.add_heading(diagnostics_obj['title'], 0)
 		doc.add_heading(diagnostics_obj['source_shape']['title'], level=1)
 		doc.add_paragraph(diagnostics_obj_text['units'])

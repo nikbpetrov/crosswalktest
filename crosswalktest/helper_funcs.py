@@ -3,6 +3,10 @@ from docx import Document
 # from docx.oxml.ns import qn
 # from docx.table import _Cell
 # from docx.shared import Pt
+# from docx import Document
+# from docx.shared import Inches
+from docx.enum.section import WD_SECTION
+from docx.enum.section import WD_ORIENT
 
 def get_projection_units(source_shape, target_shape):
 	source_axes = source_shape.crs.axis_info
@@ -44,3 +48,13 @@ def set_autofit(doc: Document) -> Document:
 				doc.tables[t_idx].rows[row_idx].cells[cell_idx]._tc.tcPr.tcW.type = 'auto'
 				doc.tables[t_idx].rows[row_idx].cells[cell_idx]._tc.tcPr.tcW.w = 0
 	return doc
+
+def change_orinetation(document):
+	# not among the most flexible of functionalities; be careful, see https://python-docx.readthedocs.io/en/latest/user/sections.html#working-with-sections
+    current_section = document.sections[0]
+    new_width, new_height = current_section.page_height, current_section.page_width
+    current_section.orientation = WD_ORIENT.LANDSCAPE
+    current_section.page_width = new_width
+    current_section.page_height = new_height
+
+    return current_section
