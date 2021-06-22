@@ -23,6 +23,7 @@ or
 # Use
 
 `cw.crosswalk(source_filepath, source_shape_id, target_filepath, target_shape_id, 
+				source_population_col_id = None, source_col_id_to_weigh_by_population = None,
 				tolerance_percent = 10, tolerance_units = None, 
 				export = False, export_filename = None)`
 
