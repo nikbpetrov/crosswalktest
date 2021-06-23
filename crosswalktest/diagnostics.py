@@ -93,22 +93,39 @@ def get_diagnostics_obj(source_shape, source_shape_id, target_shape, target_shap
 	# there is probably a better way to do this
 	memfile_source_shape_plot = BytesIO()
 	fig, ax = plt.subplots(1, 1)
-	ax.title.set_text('Source shape')
+	ax.set_title('Source shape')
+	# set aspect to equal. This is done automatically
+	# when using *geopandas* plot on it's own, but not when
+	# working with pyplot directly.
+	ax.set_aspect('equal')
 	source_shape.plot(ax=ax)
 	plt.savefig(memfile_source_shape_plot)
 	diagnostics_obj['source_shape']['plot'] = memfile_source_shape_plot
 
 	memfile_target_shape_plot = BytesIO()
 	fig, ax = plt.subplots(1, 1)
-	ax.title.set_text('Target shape')
+	ax.set_title('Target shape')
+	# ax.set_aspect('equal')
 	target_shape.plot(ax=ax)
 	plt.savefig(memfile_target_shape_plot)
 	diagnostics_obj['target_shape']['plot'] = memfile_target_shape_plot
 
 	memfile_intersect_shape_plot = BytesIO()
 	fig, ax = plt.subplots(1, 1)
-	ax.title.set_text('Intersected shape - will change')
-	intersect.plot(ax=ax)
+	if source_total_area >= target_total_area:
+		ax.set_title('Source & Target shapes overlay\n(intersected area in brown and extra unused area from the source shape in pink)', fontsize=10, pad=20)
+		# ax.set_xlabel('distance (m)')
+		# ax.set_ylabel('Damped oscillation')
+		ax.set_aspect('equal')
+		source_shape.plot(ax=ax, zorder=2, color='red', alpha=0.6)
+		target_shape.plot(ax=ax, zorder=1, color='green')
+	elif source_total_area < target_total_area:
+		ax.set_title('Source & Target shapes overlay\n(intersected area in brown and extra unused area from the target shape in pink)', fontsize=10, pad=20)
+		# ax.set_xlabel('distance (m)')
+		# ax.set_ylabel('Damped oscillation')
+		ax.set_aspect('equal')
+		target_shape.plot(ax=ax, zorder=2, color='red', alpha=0.6)
+		source_shape.plot(ax=ax, zorder=1, color='green')
 	plt.savefig(memfile_intersect_shape_plot)
 	diagnostics_obj['intersect_shape']['plot'] = memfile_intersect_shape_plot
 
@@ -247,25 +264,28 @@ def save_diagnostics_to_word(diagnostics_obj, output_type, filename = None):
 		doc.add_heading(diagnostics_obj_text['title'], 0)
 		doc.add_paragraph(diagnostics_obj_text['units'])
 		doc.add_paragraph(diagnostics_obj_text['area_lost_during_intersection'])
-		doc.add_heading(diagnostics_obj_text['source_shape']['title'], level=1)
+		doc.add_heading('1. Statistics about shapes', level=1)
+		doc.add_heading('1.1 ' + diagnostics_obj_text['source_shape']['title'], level=2)
 		doc.add_paragraph(diagnostics_obj_text['source_shape']['smallest_area'])
 		doc.add_paragraph(diagnostics_obj_text['source_shape']['total_area'])
 		doc.add_paragraph(diagnostics_obj_text['source_shape']['avg_area'])
 		doc.add_paragraph(diagnostics_obj_text['source_shape']['area_smallest_times_avg'])
-		doc.add_heading(diagnostics_obj_text['target_shape']['title'])
+		doc.add_heading('1.2 ' + diagnostics_obj_text['target_shape']['title'], level=2)
 		doc.add_paragraph(diagnostics_obj_text['target_shape']['smallest_area'])
 		doc.add_paragraph(diagnostics_obj_text['target_shape']['total_area'])
 		doc.add_paragraph(diagnostics_obj_text['target_shape']['avg_area'])
 		doc.add_paragraph(diagnostics_obj_text['target_shape']['area_smallest_times_avg'])
-		doc.add_heading(diagnostics_obj_text['intersect_shape']['title'])
+		doc.add_heading('1.3 ' + diagnostics_obj_text['intersect_shape']['title'], level=2)
 		doc.add_paragraph(diagnostics_obj_text['intersect_shape']['note'])
 		doc.add_paragraph(diagnostics_obj_text['intersect_shape']['smallest_area'])
 		doc.add_paragraph(diagnostics_obj_text['intersect_shape']['total_area'])
 		doc.add_paragraph(diagnostics_obj_text['intersect_shape']['avg_area'])
 		doc.add_paragraph(diagnostics_obj_text['intersect_shape']['area_smallest_times_avg'])
-		doc.add_heading(diagnostics_obj_text['tolerance_simulations']['title'])
+		doc.add_heading('2. ' + diagnostics_obj_text['tolerance_simulations']['title'], level=1)
 		for sim in diagnostics_obj_text['tolerance_simulations']['simulations']:
 			doc.add_paragraph(sim)
+
+		doc.add_heading('3. Source and target shapes visualisation', level=1)
 
 		doc.add_picture(diagnostics_obj_text['source_shape']['plot'])
 		doc.add_picture(diagnostics_obj_text['target_shape']['plot'])
@@ -274,7 +294,7 @@ def save_diagnostics_to_word(diagnostics_obj, output_type, filename = None):
 	elif output_type == 'table':
 		helper_funcs.change_orinetation(doc)
 		doc.add_heading(diagnostics_obj['title'], 0)
-		doc.add_heading(diagnostics_obj['source_shape']['title'], level=1)
+		doc.add_heading('1. Statistics about shapes', level=1)
 		doc.add_paragraph(diagnostics_obj_text['units'])
 		doc.add_paragraph(diagnostics_obj_text['area_lost_during_intersection'])
 
@@ -317,10 +337,10 @@ def save_diagnostics_to_word(diagnostics_obj, output_type, filename = None):
 		shape_stats_note.add_run("* Note: ").bold = True
 		shape_stats_note.add_run(diagnostics_obj['intersect_shape']['note'])
 		
-		doc.add_heading('Tolerance value simulations', level=1)
+		doc.add_heading('2. Tolerance value simulations', level=1)
 		sim_obj = diagnostics_obj['tolerance_simulations']['simulations'] # just for shorterning below code
 
-		doc.add_heading('Area lost statistics', level=2)
+		doc.add_heading('2.1. Area lost statistics', level=2)
 
 		tolerance_area_lost_table = doc.add_table(rows=1+len(sim_obj['tolerance_percent']), cols=5)
 		tolerance_area_lost_table.style = 'Table Grid'
@@ -339,7 +359,7 @@ def save_diagnostics_to_word(diagnostics_obj, output_type, filename = None):
 			tolerance_area_lost_table.cell(row_idx=i+1, col_idx=3).text = helper_funcs.format_num(sim_obj['intersect_area_lost']['area_percent_total'][i], digits=5)
 			tolerance_area_lost_table.cell(row_idx=i+1, col_idx=4).text = helper_funcs.format_num(sim_obj['intersect_area_lost']['change'][i], digits=2)
 
-		doc.add_heading('New intersected shape statistics', level=2)
+		doc.add_heading('2.2. New intersected shape statistics', level=2)
 
 		tolerance_intersect_stats_table = doc.add_table(rows=2+len(sim_obj['tolerance_percent']), cols=9)
 		tolerance_intersect_stats_table.style = 'Table Grid'
@@ -375,6 +395,12 @@ def save_diagnostics_to_word(diagnostics_obj, output_type, filename = None):
 			tolerance_intersect_stats_table.cell(row_idx=i+2, col_idx=6).text = helper_funcs.format_num(sim_obj['intersect_shape_stats']['avg_area'][i])
 			tolerance_intersect_stats_table.cell(row_idx=i+2, col_idx=7).text = helper_funcs.format_num(sim_obj['intersect_shape_stats']['area_smallest_times_avg'][i], digits=2)
 			tolerance_intersect_stats_table.cell(row_idx=i+2, col_idx=8).text = helper_funcs.format_num(sim_obj['intersect_shape_stats']['smallest_times_avg_change'][i], digits=2)
+
+		doc.add_heading('3. Source and target shapes visualisation', level=2)			
+
+		doc.add_picture(diagnostics_obj_text['source_shape']['plot'])
+		doc.add_picture(diagnostics_obj_text['target_shape']['plot'])
+		doc.add_picture(diagnostics_obj_text['intersect_shape']['plot'])
 
 		doc = helper_funcs.set_autofit(doc)
 

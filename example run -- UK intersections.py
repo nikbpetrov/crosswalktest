@@ -21,12 +21,12 @@ source_shape[source_col_id_to_weigh_by_population] = [round(random.uniform(0, 5)
 intersect, diagnostics_obj = cw.crosswalk(source_shape, source_shape_id, target_shape, target_shape_id, 
 											source_population_col_id = source_population_col_id, source_col_id_to_weigh_by_population = source_col_id_to_weigh_by_population,
 											tolerance_percent = None, tolerance_units = 3500,
-											export = True, export_filename = 'Exports/20210611_Postal Sectors to MSOA_Intersection')
+											export = True, export_filename = 'Exports/20210623_Postal Sectors to MSOA_Intersection')
 
 
 # cw.print_diagnostics(diagnostics_obj) -- optional; prints text diagnostics to console
-cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'text', filename = 'Exports/20210611_Post Sectors to MSOA_Diagnostics text')
-cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'table', filename = 'Exports/20210611_Post Sectors to MSOA_Diagnostics table')
+cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'text', filename = 'Exports/20210623_Post Sectors to MSOA_Diagnostics text')
+cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'table', filename = 'Exports/20210623_Post Sectors to MSOA_Diagnostics table')
 
 
 # # -----------------------------------------------------------Postal Sectors to Westminster
