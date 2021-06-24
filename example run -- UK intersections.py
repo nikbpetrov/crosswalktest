@@ -25,8 +25,8 @@ intersect, diagnostics_obj = cw.crosswalk(source_shape, source_shape_id, target_
 
 
 # cw.print_diagnostics(diagnostics_obj) -- optional; prints text diagnostics to console
-cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'text', filename = 'Exports/20210623_Post Sectors to MSOA_Diagnostics text')
-cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'table', filename = 'Exports/20210623_Post Sectors to MSOA_Diagnostics table')
+# cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'text', filename = 'Exports/20210623_Post Sectors to MSOA_Diagnostics text')
+# cw.save_diagnostics_to_word(diagnostics_obj, output_type = 'table', filename = 'Exports/20210623_Post Sectors to MSOA_Diagnostics table')
 
 
 # # -----------------------------------------------------------Postal Sectors to Westminster
