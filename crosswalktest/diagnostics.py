@@ -101,33 +101,32 @@ def get_diagnostics_obj(source_shape, source_shape_id, target_shape, target_shap
 	source_shape.plot(ax=ax)
 	plt.savefig(memfile_source_shape_plot)
 	diagnostics_obj['source_shape']['plot'] = memfile_source_shape_plot
+	plt.close() # safely closing plt to prevent inline display of figures
 
 	memfile_target_shape_plot = BytesIO()
 	fig, ax = plt.subplots(1, 1)
 	ax.set_title('Target shape')
-	# ax.set_aspect('equal')
+	ax.set_aspect('equal')
 	target_shape.plot(ax=ax)
 	plt.savefig(memfile_target_shape_plot)
 	diagnostics_obj['target_shape']['plot'] = memfile_target_shape_plot
+	plt.close()
 
 	memfile_intersect_shape_plot = BytesIO()
 	fig, ax = plt.subplots(1, 1)
 	if source_total_area >= target_total_area:
 		ax.set_title('Source & Target shapes overlay\n(intersected area in brown and extra unused area from the source shape in pink)', fontsize=10, pad=20)
-		# ax.set_xlabel('distance (m)')
-		# ax.set_ylabel('Damped oscillation')
 		ax.set_aspect('equal')
 		source_shape.plot(ax=ax, zorder=2, color='red', alpha=0.6)
 		target_shape.plot(ax=ax, zorder=1, color='green')
 	elif source_total_area < target_total_area:
 		ax.set_title('Source & Target shapes overlay\n(intersected area in brown and extra unused area from the target shape in pink)', fontsize=10, pad=20)
-		# ax.set_xlabel('distance (m)')
-		# ax.set_ylabel('Damped oscillation')
 		ax.set_aspect('equal')
 		target_shape.plot(ax=ax, zorder=2, color='red', alpha=0.6)
 		source_shape.plot(ax=ax, zorder=1, color='green')
 	plt.savefig(memfile_intersect_shape_plot)
 	diagnostics_obj['intersect_shape']['plot'] = memfile_intersect_shape_plot
+	plt.close()
 
 	return diagnostics_obj
 
